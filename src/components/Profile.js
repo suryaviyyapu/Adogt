@@ -5,11 +5,13 @@ import { useParams } from "react-router";
 
 function Profile() {
     const [animal, setPet] = useState({})
+    const [moreImages, setMoreImages] = useState([])
     const { id } = useParams();
     useEffect(() => {
         const URL = `http://127.0.0.1:8000/api/${id}/`
         axios.get(URL)
         .then(res => {
+            setMoreImages(res.data.more_images.split(','))
             setPet(res.data)
         })
     },[id])
@@ -134,7 +136,7 @@ function Profile() {
             </div>
             <div className="flex flex-row">
                 <div>
-                    {/* <ProfileImageSlide props={animal.more_images} /> */}
+                     <ProfileImageSlide images={[moreImages]} />
                 </div>
                 <div className="mx-8 font-mono">
                     <p className="text-gray-500 text-lg">My Story</p>
