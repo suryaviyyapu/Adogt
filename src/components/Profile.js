@@ -1,35 +1,23 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import ProfileImageSlide from "./ProfileImageSlide";
+import axios from 'axios';
+import { useParams } from "react-router";
 
 function Profile() {
-    const animal = {
-        status: 1,
-        name: "Rio",
-        gender: "male",
-        breed: "Pug",
-        date: "5-5-2021",
-        deworming: 1,
-        vaccine: 0,
-        image: "https://placedog.net/500",
-        age: 36,
-        moreImages: [
-            "https://placedog.net/500",
-            "https://placedog.net/500",
-            "https://placedog.net/500",
-        ],
-        myStory:"Rio is a super smart amazing dog with so much love to give. Rio is well trained knows all commands sit, heal, go to your bed, stay on your bed, go to your crate, paw she knows it all. Rio is very protective and so loving g she needs a experienced owner who keeps her in check and loves her.",
-        about: [
-            "I need a family which can take care of me 🥰",
-            "You ask what you get? lots of love ♥",
-        ],
-        address: "Hyderabad",
-        contact: "care@adogt.com",
-    };
+    const [animal, setPet] = useState({})
+    const { id } = useParams();
+    useEffect(() => {
+        const URL = `http://127.0.0.1:8000/api/${id}/`
+        axios.get(URL)
+        .then(res => {
+            setPet(res.data)
+        })
+    },[id])
     return (
         <div>
             <div align="center" className="flex">
                 <div className="flex flex-row my-4 ml-12">
-                    <div className>
+                    <div>
                         <img
                             className="rounded-full w-64 h-64 overflow-auto"
                             src={animal.image}
@@ -54,7 +42,7 @@ function Profile() {
                             <p>Hi👋</p>
                             <p>
                                 My name is{" "}
-                                <spam className="text-lg">{animal.name}</spam>
+                                <span className="text-lg">{animal.name}</span>
                             </p>
                             <p>
                                 I'm a {animal.age} months old healthy{" "}
@@ -65,18 +53,13 @@ function Profile() {
                                 <p className="text-lg text-gray-500">
                                     Requirements
                                 </p>
-                                <ul type="square">
-                                    {animal.about.map((abt) => (
-                                        <li className="ml-2" key={abt}>
-                                            {abt}
-                                        </li>
-                                    ))}
-                                </ul>
+                                    {animal.about}
                             </div>
                             <br />
                             <p className="text-lg text-gray-500">Got doubts?</p>
                             <div className="ml-2">
                                 <table cellPadding="2">
+                                    <tbody>
                                     <tr className="m-2">
                                         <td>You:</td>
                                         <td className=" bg-gray-400 rounded-lg p-2">
@@ -87,13 +70,13 @@ function Profile() {
                                         <td></td>
                                         <td className="text-right p-2">
                                             {animal.vaccine ? (
-                                                <spam>I got vaccinated 😁</spam>
+                                                <span>I got vaccinated 😁</span>
                                             ) : (
-                                                <spam>
+                                                <span>
                                                     {" "}
                                                     Hope to get vaccinated soon
                                                     🙃
-                                                </spam>
+                                                </span>
                                             )}
                                         </td>
                                         <td>:{animal.name}</td>
@@ -108,16 +91,16 @@ function Profile() {
                                         <td></td>
                                         <td className="text-right p-2">
                                             {animal.deworming ? (
-                                                <spam>
+                                                <span>
                                                     {" "}
                                                     Done with it baby 😎
-                                                </spam>
+                                                </span>
                                             ) : (
-                                                <spam>
+                                                <span>
                                                     {" "}
                                                     Nah!!! We will plan when we
                                                     get to your home 🙃
-                                                </spam>
+                                                </span>
                                             )}
                                         </td>
                                         <td>:{animal.name}</td>
@@ -135,6 +118,7 @@ function Profile() {
                                         </td>
                                         <td>:{animal.name}</td>
                                     </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -150,11 +134,11 @@ function Profile() {
             </div>
             <div className="flex flex-row">
                 <div>
-                    <ProfileImageSlide {...animal}/>
+                    {/* <ProfileImageSlide props={animal.more_images} /> */}
                 </div>
                 <div className="mx-8 font-mono">
                     <p className="text-gray-500 text-lg">My Story</p>
-                    <p className="ml-2">{animal.myStory}</p>
+                    <p className="ml-2">{animal.my_story}</p>
                 </div>
             </div>
         </div>
