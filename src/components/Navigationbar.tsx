@@ -1,14 +1,18 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 
-function Navigationbar() {
+
+interface Props {
+
+}
+export const Navigationbar: React.FC<Props> = () => {
     return (
         <div className="text-white bg-gray-700 flex flex-row h-16 text-lg">
             <div className="flex flex-1">
                 <div>
                     <p className="px-4 py-4 font-mono text-xl"><Link to="/">Adogt</Link></p>
                 </div>
-                <div align="center" className="flex-1 px-2 py-4">
+                <div className="text-center flex-1 px-2 py-4">
                     <form>
                         <input className="rounded-md w-96 h-auto" type="text" id="search" />
                         <input className="ml-1 w-8 rounded-md bg-green-400" type="submit" value="Go"/>
@@ -21,5 +25,4 @@ function Navigationbar() {
         </div>
     )
 }
-
 export default Navigationbar

@@ -1,33 +1,73 @@
 import React, {useState, useEffect} from "react";
 import ProfileImageSlide from "./ProfileImageSlide";
-import axios from 'axios';
 import { useParams } from "react-router";
+import {PetAPI} from "../api/api";
 
-function Profile() {
-    const [animal, setPet] = useState({})
-    const [moreImages, setMoreImages] = useState([])
-    const { id } = useParams();
+interface Props {
+
+}
+
+interface ParamsProps {
+    id: string;
+}
+export const Profile: React.FC<Props> = () => {
+    const [pet, setPet] = useState({
+        id: 0,
+        status: false,
+        created_on: "",
+        name: "",
+        gender: false,
+        breed: "",
+        age: 0,
+        deworming: false,
+        vaccine: false,
+        image: "",
+        more_images: "",
+        my_story: "",
+        about: "",
+        address: "",
+        contact: ""
+
+    });
+    const [error, setIsError] = useState(false);
+    const { id } = useParams<ParamsProps>();
     useEffect(() => {
-        const URL = `http://127.0.0.1:8000/api/${id}/`
-        axios.get(URL)
-        .then(res => {
-            setMoreImages(res.data.more_images.split(','))
-            setPet(res.data)
+        PetAPI.getAPost(id)
+            .then((data) => {
+            setPet({...data,
+                status: data.status,
+            created_on: data.created_on,
+            name: data.name,
+            gender: data.gender,
+            breed: data.breed,
+            age: data.age,
+            deworming: data.deworming,
+            vaccine: data.vaccine,
+            image: data.image,
+            more_images: data.more_images,
+            my_story: data.my_story,
+            about: data.about,
+            address: data.address,
+            contact: data.contact});
         })
+            .catch((err) => {
+                setIsError(true);
+            })
     },[id])
     return (
         <div>
-            <div align="center" className="flex">
+            <div className="text-center flex">
+                {error && <p>Error occurred</p>}
                 <div className="flex flex-row my-4 ml-12">
                     <div>
                         <img
                             className="rounded-full w-64 h-64 overflow-auto"
-                            src={animal.image}
+                            src={pet.image}
                             alt="Profile"
                         />
-                        <p className="m-2 font-mono">Posted on {animal.date}</p>
+                        <p className="m-2 font-mono">Posted on {pet.created_on}</p>
                         <div className="text-xl font-bold">
-                            {animal.status ? (
+                            {pet.status ? (
                                 <p className="bg-green-600 text-center">
                                     Available for adoption ✔
                                 </p>
@@ -44,18 +84,18 @@ function Profile() {
                             <p>Hi👋</p>
                             <p>
                                 My name is{" "}
-                                <span className="text-lg">{animal.name}</span>
+                                <span className="text-lg">{pet.name}</span>
                             </p>
                             <p>
-                                I'm a {animal.age} months old healthy{" "}
-                                {animal.gender} {animal.breed} 🐕
+                                I'm a {pet.age} months old healthy{" "}
+                                {pet.gender} {pet.breed} 🐕
                             </p>
                             <br />
                             <div>
                                 <p className="text-lg text-gray-500">
                                     Requirements
                                 </p>
-                                    {animal.about}
+                                {pet.about}
                             </div>
                             <br />
                             <p className="text-lg text-gray-500">Got doubts?</p>
@@ -71,7 +111,7 @@ function Profile() {
                                     <tr>
                                         <td></td>
                                         <td className="text-right p-2">
-                                            {animal.vaccine ? (
+                                            {pet.vaccine ? (
                                                 <span>I got vaccinated 😁</span>
                                             ) : (
                                                 <span>
@@ -81,7 +121,7 @@ function Profile() {
                                                 </span>
                                             )}
                                         </td>
-                                        <td>:{animal.name}</td>
+                                        <td>:{pet.name}</td>
                                     </tr>
                                     <tr>
                                         <td>You:</td>
@@ -92,7 +132,7 @@ function Profile() {
                                     <tr>
                                         <td></td>
                                         <td className="text-right p-2">
-                                            {animal.deworming ? (
+                                            {pet.deworming ? (
                                                 <span>
                                                     {" "}
                                                     Done with it baby 😎
@@ -105,7 +145,7 @@ function Profile() {
                                                 </span>
                                             )}
                                         </td>
-                                        <td>:{animal.name}</td>
+                                        <td>:{pet.name}</td>
                                     </tr>
                                     <tr>
                                         <td>You:</td>
@@ -116,9 +156,9 @@ function Profile() {
                                     <tr>
                                         <td></td>
                                         <td className="text-right p-2">
-                                            {animal.address}
+                                            {pet.address}
                                         </td>
-                                        <td>:{animal.name}</td>
+                                        <td>:{pet.name}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -129,18 +169,18 @@ function Profile() {
                             <p className="text-lg text-gray-500">
                                 Wanna know more about me?
                             </p>
-                            <p className="ml-2">Contact {animal.contact}</p>
+                            <p className="ml-2">Contact {pet.contact}</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div className="flex flex-row">
                 <div>
-                     <ProfileImageSlide images={[moreImages]} />
+                    <ProfileImageSlide images={pet.more_images} />
                 </div>
                 <div className="mx-8 font-mono">
                     <p className="text-gray-500 text-lg">My Story</p>
-                    <p className="ml-2">{animal.my_story}</p>
+                    <p className="ml-2">{pet.my_story}</p>
                 </div>
             </div>
         </div>
