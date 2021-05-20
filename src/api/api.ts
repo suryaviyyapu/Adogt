@@ -16,6 +16,7 @@ const requests = {
 };
 
 export const PetAPI = {
-    getPosts: (): Promise<PetInterface[]> => requests.get('listing'),
-    getAPost: (id: string): Promise<PetInterface> => requests.get(`${id}/`)
+    getPets: (): Promise<PetInterface[]> => requests.get('listing'),
+    getBreed: (breed: string): Promise<PetInterface[]> => requests.get(`pets/?search=${breed}`),
+    getAPet: (id: string): Promise<PetInterface> => requests.get(`${id}/`)
 };

@@ -12,7 +12,7 @@ const ProfileList: React.FC<Props> = () => {
     const [Pets, setPets] = useState<PetInterface[]>([]);
     const [error, setIsError] = useState(false);
     useEffect(() => {
-        PetAPI.getPosts()
+        PetAPI.getPets()
             .then((data) => {
                 setPets(data);
             })

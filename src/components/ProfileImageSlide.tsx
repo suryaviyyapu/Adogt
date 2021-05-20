@@ -11,7 +11,7 @@ images
     let id: number = 0
     return (
         <div>
-            <div className="ml-6">
+            <div>
                 <Carousel
                     wrapAround={true}
                     autoplay={true}
